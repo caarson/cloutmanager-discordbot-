@@ -1,3 +1,4 @@
+# Python 3.6 Discord.py, Emoji
 # imports
 import asyncio
 import time
@@ -12,6 +13,10 @@ from discord.ext import commands
 class Utilities:
     def __init__(self):
         pass
+
+    # deletes a channel given it's context
+    async def delete_channel(self, ctx):
+        await ctx.channel.delete()
 
     # renames a channel given its context
     async def rename_channel(self, ctx):
@@ -63,7 +68,7 @@ Ticketing = Ticketing()
 ########################################################################
 # variables
 ########################################################################
-token = ""  # Get at discordapp.com/developers/applications/me | switch to change server location.
+token = "NjA3NzE1OTA5NTMxODYwOTky.XjhIRw.v_ioVRinP7l1u6Y34StC56QvRDI"  # Get at discordapp.com/developers/applications/me | switch to change server location.
 bot = commands.Bot(command_prefix='>')
 method_message = "a method has been executed."
 payment_email = 'derejrcar@gmail.com'
@@ -171,6 +176,13 @@ async def standard(ctx):  # confirms the payment then executes rename_channel.
 
     await Ticketing.rename_ticket(ctx, suffix)
 
+@bot.command()
+async def delete_channel(ctx):  # prints delete channel then runs delete from utilities
+    await ctx.send(emoji.emojize('Deleting channel...'))
+
+    time.sleep(1)
+
+    await Utilities.delete_channel(ctx)
 
 @bot.command()
 async def confirm(ctx):  # confirms the payment then executes rename_ticket.
@@ -217,4 +229,18 @@ async def complete(ctx):
     await Ticketing.rename_ticket(ctx, suffix)
 
 
-bot.run(token)
+bot_ran = False
+while not bot_ran:
+    try:
+        bot.run(token)
+        bot_ran = True
+    except:
+        print('trying run bot again...')
+        try:
+            time.sleep(1000)
+            bot.run(token)
+            bot_ran = True
+        except:
+            print("failed to run bot again!")
+            bot_ran = False
+
